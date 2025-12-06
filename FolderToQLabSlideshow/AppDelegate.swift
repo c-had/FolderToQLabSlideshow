@@ -9,16 +9,18 @@ import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
+    var client: OSCClient?
 
     @IBOutlet var window: NSWindow!
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        client = OSCClient()
+        client?.connect()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+        client?.disconnect()
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
