@@ -1,0 +1,15 @@
+{
+  "originHash" : "d409b0c38a21aee73d9d85518b685176c2688b02732931148fdc88f3040d5c51",
+  "pins" : [
+    {
+      "identity" : "f53osc",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:Figure53/F53OSC.git",
+      "state" : {
+        "revision" : "85fb59c793d3a7ddd7663741a75a501f379dfd50",
+        "version" : "1.3.1"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		63882D752EE4A144006954AB /* F53OSC in Frameworks */ = {isa = PBXBuildFile; productRef = 63882D742EE4A144006954AB /* F53OSC */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		63C183462EE3FEF60071B044 /* FolderToQLabSlideshow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FolderToQLabSlideshow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63882D752EE4A144006954AB /* F53OSC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = FolderToQLabSlideshow;
 			packageProductDependencies = (
+				63882D742EE4A144006954AB /* F53OSC */,
 			);
 			productName = FolderToQLabSlideshow;
 			productReference = 63C183462EE3FEF60071B044 /* FolderToQLabSlideshow.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 63C1833D2EE3FEF60071B044;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				63882D732EE4A144006954AB /* XCRemoteSwiftPackageReference "F53OSC" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63C183472EE3FEF60071B044 /* Products */;
 			projectDirPath = "";
@@ -319,6 +328,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		63882D732EE4A144006954AB /* XCRemoteSwiftPackageReference "F53OSC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:Figure53/F53OSC.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		63882D742EE4A144006954AB /* F53OSC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63882D732EE4A144006954AB /* XCRemoteSwiftPackageReference "F53OSC" */;
+			productName = F53OSC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 63C1833E2EE3FEF60071B044 /* Project object */;
 }
