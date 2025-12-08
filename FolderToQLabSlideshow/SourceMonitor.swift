@@ -7,6 +7,7 @@
 import Foundation
 import System
 import CoreImage
+import Cocoa
 
 class SourceMonitor
 {
@@ -17,6 +18,11 @@ class SourceMonitor
     var updateQLabTimer: DispatchSourceTimer?
     var checkFilesTimer: DispatchSourceTimer?
 
+    init()
+    {
+        signal(SIGUSR1, sigUSR1Handler)
+    }
+
     func monitorChanges()
     {
         checkFilesTimer?.cancel()
@@ -26,7 +32,6 @@ class SourceMonitor
             self.checkFiles()
         }
         checkFilesTimer?.resume()
-
     }
 
     func stop()
@@ -37,9 +42,9 @@ class SourceMonitor
         client = nil
     }
 
-    func checkFiles()
+    func checkFiles(forceUpdate: Bool = false, updateNow: Bool = false)
     {
-        var changesPresent = false
+        var changesPresent = forceUpdate
         if let theClient = client
         {
             if theClient.errorState
@@ -93,14 +98,21 @@ class SourceMonitor
                         currentFiles.append(path.string)
                     }
                 }
-                print("Found changes. Trying in 32")
                 updateQLabTimer?.cancel()
-                updateQLabTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-                updateQLabTimer?.schedule(deadline: .now().advanced(by: .seconds(32)), repeating: .never, leeway: .milliseconds(100))
-                updateQLabTimer?.setEventHandler {
-                    self.updateQLab(currentFiles)
+                if (updateNow)
+                {
+                    updateQLab(currentFiles)
                 }
-                updateQLabTimer?.resume()
+                else
+                {
+                    print("Found changes. Trying in 32")
+                    updateQLabTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+                    updateQLabTimer?.schedule(deadline: .now().advanced(by: .seconds(32)), repeating: .never, leeway: .milliseconds(100))
+                    updateQLabTimer?.setEventHandler {
+                        self.updateQLab(currentFiles)
+                    }
+                    updateQLabTimer?.resume()
+                }
             }
         }
     }
@@ -129,5 +141,13 @@ class SourceMonitor
             // client is busy, try again
             lastChange = Date(timeIntervalSince1970: 0)
         }
+    }
+}
+
+func sigUSR1Handler(signal: Int32)
+{
+    if let delegate = NSApp.delegate as? AppDelegate
+    {
+        delegate.monitor?.checkFiles(forceUpdate: true, updateNow: true)
     }
 }
