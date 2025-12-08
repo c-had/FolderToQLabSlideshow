@@ -9,25 +9,22 @@ import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var client: OSCClient?
+    var monitor: SourceMonitor?
 
     @IBOutlet var window: NSWindow!
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        client = OSCClient()
-        _ = client?.setSlideshowFiles(["/Users/chad/Downloads/Running Today/Barbie Collection.png"])
-
+        monitor = SourceMonitor()
+        monitor?.monitorChanges()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        client?.disconnect()
+        monitor?.stop()
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
-
-
 }
 
