@@ -16,7 +16,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         client = OSCClient()
-        client?.connect()
+        _ = client?.setSlideshowFiles(["/Users/chad/Downloads/Running Today/Barbie Collection.png"])
+
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
