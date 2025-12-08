@@ -40,6 +40,15 @@ class SourceMonitor
     func checkFiles()
     {
         var changesPresent = false
+        if let theClient = client
+        {
+            if theClient.errorState
+            {
+                // Something went wrong before, so we should update
+                changesPresent = true
+                theClient.errorState = false
+            }
+        }
         let fm = FileManager.default
         if let files = try? fm.contentsOfDirectory(atPath: sourceFolder)
         {
@@ -114,6 +123,11 @@ class SourceMonitor
         {
             client = OSCClient()
         }
-        _ = client?.setSlideshowFiles(files)
+        let theClient = client!
+        if !theClient.setSlideshowFiles(files)
+        {
+            // client is busy, try again
+            lastChange = Date(timeIntervalSince1970: 0)
+        }
     }
 }

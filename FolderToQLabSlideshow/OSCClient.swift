@@ -28,6 +28,7 @@ enum OSCState: Int
 
 class OSCClient: NSObject, F53OSCClientDelegate
 {
+    var errorState = false
     var client: F53OSCClient?
     let passcode = "0031"
     let groupCue1 = "SS1"
@@ -65,6 +66,7 @@ class OSCClient: NSObject, F53OSCClientDelegate
         {
             return false
         }
+        errorState = false
         filesToProcess = filenames
         connect()
         return true
@@ -170,6 +172,11 @@ class OSCClient: NSObject, F53OSCClientDelegate
                 {
                     if let arguments = try? JSONSerialization.jsonObject(with: argumentsData) as? [String: AnyObject]
                     {
+                        let status = arguments["status"] as! String
+                        if status != "ok"
+                        {
+                            errorState = true
+                        }
                         print(arguments)
                         if let tempMessage = F53OSCMessage(string: arguments["address"] as! String)
                         {
