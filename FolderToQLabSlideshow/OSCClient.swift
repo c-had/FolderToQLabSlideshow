@@ -177,7 +177,7 @@ class OSCClient: NSObject, F53OSCClientDelegate
                         {
                             errorState = true
                         }
-                        print(arguments)
+//                        print(arguments)
                         if let tempMessage = F53OSCMessage(string: arguments["address"] as! String)
                         {
                             let addressParts = tempMessage.addressParts()
@@ -226,7 +226,6 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                     if let armed = arguments["data"] as? Bool
                                     {
                                         modifyCue1 = !armed
-                                        print("modifyCue1 = " + String(modifyCue1))
                                         listOldChildren()
                                     }
                                 default:
@@ -277,6 +276,6 @@ class OSCClient: NSObject, F53OSCClientDelegate
     }
 
     func clientDidDisconnect(_ client: F53OSCClient) {
-        print(client.isConnected)
+//        print(client.isConnected)
     }
 }

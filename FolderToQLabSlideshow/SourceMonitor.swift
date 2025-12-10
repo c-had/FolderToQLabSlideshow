@@ -105,7 +105,7 @@ class SourceMonitor
                 }
                 else
                 {
-                    print("Found changes. Trying in 32")
+//                    print("Found changes. Trying in 32")
                     updateQLabTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
                     updateQLabTimer?.schedule(deadline: .now().advanced(by: .seconds(32)), repeating: .never, leeway: .milliseconds(100))
                     updateQLabTimer?.setEventHandler {
