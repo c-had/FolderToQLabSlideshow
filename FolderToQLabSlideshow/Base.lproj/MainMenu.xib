@@ -15,6 +15,9 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="FolderToQLabSlideshow" customModuleProvider="target">
             <connections>
+                <outlet property="OSCPINLabel" destination="TzU-ee-2Y6" id="2B7-Qf-GBm"/>
+                <outlet property="prefsWindow" destination="sf1-rm-v7C" id="Aur-or-bWl"/>
+                <outlet property="watchPathLabel" destination="3Ot-T3-aYn" id="dQ8-4O-xyt"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -32,7 +35,11 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
+                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                <connections>
+                                    <action selector="showPreferencesWithSender:" target="Voe-Tx-rLC" id="cee-rf-OGn"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                             <menuItem title="Services" id="NMo-om-nkz">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -694,6 +701,96 @@
                 <outlet property="delegate" destination="Voe-Tx-rLC" id="top-28-M4D"/>
             </connections>
             <point key="canvasLocation" x="200" y="400"/>
+        </window>
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="sf1-rm-v7C">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="1924" y="243" width="480" height="270"/>
+            <rect key="screenRect" x="1728" y="37" width="1920" height="1055"/>
+            <view key="contentView" id="vKp-Ug-fzc">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TzU-ee-2Y6">
+                        <rect key="frame" x="160" y="229" width="96" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="96" id="t04-vF-b2S"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="33D-ve-2Qz">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <action selector="PINChangedWithSender:" target="Voe-Tx-rLC" id="djY-Rx-crc"/>
+                        </connections>
+                    </textField>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J0K-s7-IWr">
+                        <rect key="frame" x="94" y="232" width="60" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="OSC PIN:" id="hii-CL-58k">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Ot-T3-aYn">
+                        <rect key="frame" x="160" y="195" width="322" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Unset" id="Fe3-cf-23q">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vrF-zv-hOs">
+                        <rect key="frame" x="155" y="160" width="81" height="32"/>
+                        <buttonCell key="cell" type="push" title="Change" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mUT-YH-Gpl">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="67" id="7Bp-Vs-TGm"/>
+                        </constraints>
+                        <connections>
+                            <action selector="watchPathChangeButtonPressedWithSender:" target="Voe-Tx-rLC" id="JOf-VR-3rH"/>
+                        </connections>
+                    </button>
+                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iWf-9r-oCW">
+                        <rect key="frame" x="63" y="195" width="91" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="87" id="UZc-lt-vYQ"/>
+                        </constraints>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Path to watch:" id="FBI-St-yvz">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="3Ot-T3-aYn" firstAttribute="leading" secondItem="iWf-9r-oCW" secondAttribute="trailing" constant="10" id="0w4-Sc-f1Q"/>
+                    <constraint firstAttribute="trailing" secondItem="3Ot-T3-aYn" secondAttribute="trailing" id="4Vl-ot-hsW"/>
+                    <constraint firstItem="vrF-zv-hOs" firstAttribute="top" secondItem="3Ot-T3-aYn" secondAttribute="bottom" constant="8" symbolic="YES" id="E5K-8N-ium"/>
+                    <constraint firstItem="vrF-zv-hOs" firstAttribute="leading" secondItem="vKp-Ug-fzc" secondAttribute="leading" constant="162" id="EK8-XC-ACI"/>
+                    <constraint firstItem="3Ot-T3-aYn" firstAttribute="top" secondItem="TzU-ee-2Y6" secondAttribute="bottom" constant="18" id="Fk0-6n-Opb"/>
+                    <constraint firstItem="J0K-s7-IWr" firstAttribute="leading" secondItem="vKp-Ug-fzc" secondAttribute="leading" constant="96" id="KoK-eH-gvi"/>
+                    <constraint firstItem="3Ot-T3-aYn" firstAttribute="leading" secondItem="iWf-9r-oCW" secondAttribute="trailing" constant="10" id="Nin-4Y-dVY"/>
+                    <constraint firstItem="3Ot-T3-aYn" firstAttribute="leading" secondItem="iWf-9r-oCW" secondAttribute="trailing" constant="10" id="buI-kB-sTc"/>
+                    <constraint firstItem="vrF-zv-hOs" firstAttribute="top" secondItem="3Ot-T3-aYn" secondAttribute="bottom" constant="8" symbolic="YES" id="dOM-2b-Uxk"/>
+                    <constraint firstItem="iWf-9r-oCW" firstAttribute="top" secondItem="J0K-s7-IWr" secondAttribute="bottom" constant="21" id="f0C-sT-CCm"/>
+                    <constraint firstItem="vrF-zv-hOs" firstAttribute="top" secondItem="3Ot-T3-aYn" secondAttribute="bottom" constant="8" symbolic="YES" id="ftE-xL-VLi"/>
+                    <constraint firstItem="iWf-9r-oCW" firstAttribute="leading" secondItem="vKp-Ug-fzc" secondAttribute="leading" constant="65" id="iLV-fq-MUE"/>
+                    <constraint firstItem="TzU-ee-2Y6" firstAttribute="leading" secondItem="J0K-s7-IWr" secondAttribute="trailing" constant="8" symbolic="YES" id="luA-z8-cHJ"/>
+                    <constraint firstItem="J0K-s7-IWr" firstAttribute="top" secondItem="vKp-Ug-fzc" secondAttribute="top" constant="22" id="nux-t3-WlR"/>
+                    <constraint firstAttribute="trailing" secondItem="3Ot-T3-aYn" secondAttribute="trailing" id="qgj-YC-hdG"/>
+                    <constraint firstItem="TzU-ee-2Y6" firstAttribute="top" secondItem="vKp-Ug-fzc" secondAttribute="top" constant="20" symbolic="YES" id="t0O-zA-HDg"/>
+                    <constraint firstAttribute="trailing" secondItem="3Ot-T3-aYn" secondAttribute="trailing" id="vMj-3j-f8d"/>
+                    <constraint firstItem="3Ot-T3-aYn" firstAttribute="top" secondItem="TzU-ee-2Y6" secondAttribute="bottom" constant="18" id="yfj-hy-1au"/>
+                </constraints>
+            </view>
+            <connections>
+                <outlet property="initialFirstResponder" destination="vrF-zv-hOs" id="Ym8-tH-uBz"/>
+            </connections>
+            <point key="canvasLocation" x="-143" y="-29"/>
         </window>
     </objects>
 </document>

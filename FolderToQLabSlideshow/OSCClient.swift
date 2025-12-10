@@ -30,7 +30,7 @@ class OSCClient: NSObject, F53OSCClientDelegate
 {
     var errorState = false
     var client: F53OSCClient?
-    let passcode = "0031"
+    var passcode = "0000"
     let groupCue1 = "SS1"
     let groupCue2 = "SS2"
     var groupCue1ID: String?
@@ -45,6 +45,10 @@ class OSCClient: NSObject, F53OSCClientDelegate
 
     public func connect()
     {
+        if let pin = UserDefaults.standard.string(forKey: "OSCPIN")
+        {
+            passcode = pin
+        }
         state = .connecting
         client = F53OSCClient()
         client?.isIPv6Enabled = false

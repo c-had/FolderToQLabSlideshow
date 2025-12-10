@@ -11,7 +11,7 @@ import Cocoa
 
 class SourceMonitor
 {
-    let sourceFolder = "/Users/chad/Downloads/Running Today/"
+    var sourceFolder = ""
     var client: OSCClient?
     var lastChange = Date(timeIntervalSince1970: 0)
     var lastFiles: Array<String> = []
@@ -21,6 +21,10 @@ class SourceMonitor
     init()
     {
         signal(SIGUSR1, sigUSR1Handler)
+        if let watchPath = UserDefaults.standard.url(forKey: "watchPath")
+        {
+            sourceFolder = FilePath(watchPath)!.string
+        }
     }
 
     func monitorChanges()
