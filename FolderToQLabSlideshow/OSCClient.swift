@@ -164,6 +164,7 @@ class OSCClient: NSObject, F53OSCClientDelegate
 // MARK: F53OSCClientDelegate
 
     func take(_ message: F53OSCMessage?) {
+        var somethingWentWrong = true
         if let theMessage = message
         {
             if let argumentsString = theMessage.arguments[0] as? String
@@ -173,9 +174,9 @@ class OSCClient: NSObject, F53OSCClientDelegate
                     if let arguments = try? JSONSerialization.jsonObject(with: argumentsData) as? [String: AnyObject]
                     {
                         let status = arguments["status"] as! String
-                        if status != "ok"
+                        if status == "ok"
                         {
-                            errorState = true
+                            somethingWentWrong = false
                         }
 //                        print(arguments)
                         if let tempMessage = F53OSCMessage(string: arguments["address"] as! String)
@@ -194,10 +195,18 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                         let message = F53OSCMessage(addressPattern: "/alwaysReply", arguments: [1])
                                         client?.send(message)
                                     }
+                                    else
+                                    {
+                                        somethingWentWrong = true
+                                    }
                                 case "alwaysReply":
                                     if let message = F53OSCMessage(string: "/workspace/" + workspaceID! + "/cue/" + groupCue1 + "/uniqueID")
                                     {
                                         client?.send(message)
+                                    }
+                                    else
+                                    {
+                                        somethingWentWrong = true
                                     }
                                 case "uniqueID":
                                     // Record our workspace ID
@@ -211,6 +220,10 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                             {
                                                 client?.send(message)
                                             }
+                                            else
+                                            {
+                                                somethingWentWrong = true
+                                            }
                                         }
                                         else if groupCue2 == groupCueNumber
                                         {
@@ -219,7 +232,19 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                             {
                                                 client?.send(message)
                                             }
+                                            else
+                                            {
+                                                somethingWentWrong = true
+                                            }
                                         }
+                                        else
+                                        {
+                                            somethingWentWrong = true
+                                        }
+                                    }
+                                    else
+                                    {
+                                        somethingWentWrong = true
                                     }
                                 case "armed":
                                     state = .connected
@@ -228,8 +253,12 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                         modifyCue1 = !armed
                                         listOldChildren()
                                     }
+                                    else
+                                    {
+                                        somethingWentWrong = true
+                                    }
                                 default:
-                                    break
+                                    somethingWentWrong = true
                                 }
                             case .listingOldChildren:
                                 if let children = arguments["data"] as? [[String:AnyObject]]
@@ -240,6 +269,10 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                         oldCuesToDelete.append(childID!)
                                     }
                                 }
+                                else
+                                {
+                                    somethingWentWrong = true
+                                }
                                 deleteOldChild()
                             case .removingOldChildren:
                                 deleteOldChild()
@@ -247,6 +280,10 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                 if let cueID = arguments["data"] as? String
                                 {
                                     cueCreated(cueID)
+                                }
+                                else
+                                {
+                                    somethingWentWrong = true
                                 }
                             case .moving:
                                 cueMoved()
@@ -262,9 +299,17 @@ class OSCClient: NSObject, F53OSCClientDelegate
                                 break
                             }
                         }
+                        else
+                        {
+                            somethingWentWrong = true
+                        }
                     }
                 }
             }
+        }
+        if (somethingWentWrong)
+        {
+            errorState = true
         }
     }
 
@@ -276,6 +321,7 @@ class OSCClient: NSObject, F53OSCClientDelegate
     }
 
     func clientDidDisconnect(_ client: F53OSCClient) {
+        errorState = true
 //        print(client.isConnected)
     }
 }
