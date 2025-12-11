@@ -136,7 +136,12 @@ class OSCClient: NSObject, F53OSCClientDelegate
     func cueTargeted()
     {
         filesToProcess.remove(at: 0)
-        let message = F53OSCMessage(addressPattern: "/cue_id/" + currentCueID! + "/duration", arguments: [5])
+        var slideDuration = UserDefaults.standard.float(forKey: "slideDuration")
+        if slideDuration < 0.1
+        {
+            slideDuration = 10
+        }
+        let message = F53OSCMessage(addressPattern: "/cue_id/" + currentCueID! + "/duration", arguments: [slideDuration])
         state = .settingDuration
         client?.send(message)
     }

@@ -16,6 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var prefsWindow: NSWindow!
     @IBOutlet var OSCPINLabel: NSTextField!
     @IBOutlet var watchPathLabel: NSTextField!
+    @IBOutlet var slideDurationPath: NSTextField!
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification)
@@ -62,6 +63,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         {
             watchPathLabel.stringValue = "Unset"
         }
+        let duration = UserDefaults.standard.float(forKey: "slideDuration")
+        if (duration > 0)
+        {
+            slideDurationPath.floatValue = duration
+        }
+        else
+        {
+            slideDurationPath.stringValue = ""
+        }
         prefsWindow.makeKeyAndOrderFront(self)
     }
 
@@ -90,6 +100,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     self.start()
                 }
             }
+        }
+    }
+
+    @IBAction func slideDurationChanged(sender: AnyObject)
+    {
+        let slideText = slideDurationPath.stringValue
+        if let duration = Double(slideText)
+        {
+            UserDefaults.standard.set(duration, forKey: "slideDuration")
+            stop()
+            start()
+        }
+        else
+        {
+            showPreferences(sender: self)
         }
     }
 }
