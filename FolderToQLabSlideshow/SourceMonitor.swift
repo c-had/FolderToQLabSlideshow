@@ -8,6 +8,7 @@ import Foundation
 import System
 import CoreImage
 import Cocoa
+import CryptoKit
 
 class SourceMonitor
 {
@@ -15,6 +16,7 @@ class SourceMonitor
     var client: OSCClient?
     var lastChange = Date(timeIntervalSince1970: 0)
     var lastFiles: Array<String> = []
+    var lastHashes: Dictionary<String, SHA256.Digest> = [:]
     var updateQLabTimer: DispatchSourceTimer?
     var checkFilesTimer: DispatchSourceTimer?
 
@@ -61,47 +63,63 @@ class SourceMonitor
         let fm = FileManager.default
         if let files = try? fm.contentsOfDirectory(atPath: sourceFolder)
         {
-            if files != lastFiles
-            {
-                changesPresent = true
-                lastFiles = files
-            }
+            var currentFiles: Array<String> = []
+            var currentHashes: Dictionary<String, SHA256.Digest> = [:]
             for file in files
             {
                 var path: FilePath = FilePath(sourceFolder)
                 path.append(file)
-                if let fileAttrs = try? fm.attributesOfItem(atPath: path.string)/* as NSDictionary*/
+                if (isImage(path))
                 {
-                    if let thisDate = fileAttrs[.modificationDate] as? Date
+                    currentFiles.append(path.string)
+                    if let fileAttrs = try? fm.attributesOfItem(atPath: path.string)/* as NSDictionary*/
                     {
-                        if thisDate > lastChange
+                        if let thisDate = fileAttrs[.modificationDate] as? Date
                         {
-                            changesPresent = true
-                            lastChange = thisDate
+                            if thisDate > lastChange
+                            {
+                                changesPresent = true
+                                lastChange = thisDate
+                            }
+                        }
+                        if let thisDate = fileAttrs[.creationDate] as? Date
+                        {
+                            if thisDate > lastChange
+                            {
+                                changesPresent = true
+                                lastChange = thisDate
+                            }
                         }
                     }
-                    if let thisDate = fileAttrs[.creationDate] as? Date
+                    if let url = URL(filePath: path)
                     {
-                        if thisDate > lastChange
+                        if let fileData = try? Data(contentsOf: url)
                         {
-                            changesPresent = true
-                            lastChange = thisDate
+                            let fileHash = SHA256.hash(data: fileData)
+                            currentHashes[file] = fileHash
+                            if let lastHash = lastHashes[file]
+                            {
+                                if lastHash != fileHash
+                                {
+                                    changesPresent = true
+                                }
+                            }
+                            else
+                            {
+                                changesPresent = true
+                            }
                         }
                     }
                 }
             }
+            if currentFiles != lastFiles
+            {
+                changesPresent = true
+            }
             if changesPresent
             {
-                var currentFiles: Array<String> = []
-                for file in files
-                {
-                    var path: FilePath = FilePath(sourceFolder)
-                    path.append(file)
-                    if (isImage(path))
-                    {
-                        currentFiles.append(path.string)
-                    }
-                }
+                lastFiles = currentFiles
+                lastHashes = currentHashes
                 updateQLabTimer?.cancel()
                 if (updateNow)
                 {
